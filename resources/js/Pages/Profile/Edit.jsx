@@ -6,7 +6,7 @@ import UpdateProfileInformationForm from './Partials/UpdateProfileInformationFor
 
 export default function Edit({ mustVerifyEmail, status }) {
     return (
-        <PortalLayout title="Profile">
+        <PortalLayout title="Profile" subtitle="Your account details and password">
         
 
             <div className="py-12">

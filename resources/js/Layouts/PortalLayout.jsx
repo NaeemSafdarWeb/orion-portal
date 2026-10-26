@@ -4,12 +4,13 @@ import { Menu } from 'lucide-react';
 import Sidebar from '@/Components/Portal/Sidebar';
 
 /**
- * The shell every portal screen sits in: sidebar, page title, content area.
+ * The shell every portal screen sits in: sidebar, page header, content area.
  *
- * The collapsed state is remembered in localStorage so it survives page
- * changes, which matters on a system people keep open all day.
+ * `title`    short page name, shown uppercase as in the wireframe
+ * `subtitle` optional line of context underneath
+ * `actions`  buttons on the right of the header
  */
-export default function PortalLayout({ title, actions, counts, children }) {
+export default function PortalLayout({ title, subtitle, actions, counts, children }) {
     const [collapsed, setCollapsed] = useState(false);
     const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -47,15 +48,29 @@ export default function PortalLayout({ title, actions, counts, children }) {
                     >
                         <Menu className="h-6 w-6" />
                     </button>
-                    <span className="text-base font-bold uppercase tracking-tight text-slate-900">{title}</span>
+                    <span className="text-sm font-bold uppercase tracking-wide text-slate-900">{title}</span>
                 </div>
 
                 <main className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-                    <div className="mb-6 hidden items-center justify-between gap-4 lg:flex">
-                        <h1 className="text-2xl font-extrabold uppercase tracking-tight text-slate-900">
-                            {title}
-                        </h1>
-                        {actions && <div className="flex items-center gap-2">{actions}</div>}
+                    {/* Page header */}
+                    <div className="mb-6 hidden lg:block">
+                        <div className="flex items-start justify-between gap-4">
+                            <div>
+                                <div className="flex items-center gap-3">
+                                    <span className="h-5 w-1 rounded-full bg-[#E11D23]" aria-hidden="true" />
+                                    <h1 className="text-xl font-bold uppercase tracking-[0.08em] text-slate-900">
+                                        {title}
+                                    </h1>
+                                </div>
+                                {subtitle && (
+                                    <p className="mt-1.5 pl-4 text-sm text-slate-500">{subtitle}</p>
+                                )}
+                            </div>
+
+                            {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+                        </div>
+
+                        <div className="mt-5 border-b border-slate-200" />
                     </div>
 
                     {actions && <div className="mb-4 flex flex-wrap items-center gap-2 lg:hidden">{actions}</div>}
