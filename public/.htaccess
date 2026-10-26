@@ -24,10 +24,5 @@
     RewriteRule ^ index.php [L]
 </IfModule>
 
-# DO NOT REMOVE THIS LINE AND THE LINES BELOW PWPROTECTID:01P6HE3s5K
-AuthType Basic
-AuthName "Restricted Access"
-AuthUserFile /home/u777476277/domains/naeemsafdar.net/public_html/orionportal/.htpasswd
-Require valid-user
-# DO NOT REMOVE THIS LINE AND THE LINES ABOVE 01P6HE3s5K:PWPROTECTID
+
 
