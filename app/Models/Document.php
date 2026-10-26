@@ -100,4 +100,17 @@ class Document extends Model
     {
         return $this->path ? Storage::disk($this->disk)->temporaryUrl($this->path, now()->addMinutes(10)) : null;
     }
+
+        /**
+     * Current documents that are expired or inside their warning window.
+     * Negative day counts are expired, so this covers both red and yellow.
+     */
+    public function scopeNeedsAttention(Builder $query): Builder
+    {
+        return $query->current()
+            ->whereNotNull('expires_on')
+            ->whereHas('documentType', function (Builder $q) {
+                $q->whereRaw('DATEDIFF(documents.expires_on, CURDATE()) <= document_types.warning_days');
+            });
+    }
 }

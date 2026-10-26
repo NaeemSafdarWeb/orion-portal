@@ -25,16 +25,28 @@ Route::middleware('auth')->group(function () {
 });
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/overview', function () {
-        return Inertia::render('Portal/Overview', [
-            'stats' => [
-                'companies' => \App\Models\Company::count(),
-                'alerts' => 0,
-                'drivers' => \App\Models\Driver::count(),
-                'vehicles' => \App\Models\Vehicle::count(),
-                'other' => 0,
-            ],
-        ]);
-    })->name('overview');
+    $needsAttention = fn ($query) => $query->needsAttention();
+
+    $driverAlerts = \App\Models\Driver::whereHas('documents', $needsAttention)->count();
+    $vehicleAlerts = \App\Models\Vehicle::whereHas('documents', $needsAttention)->count();
+    $otherAlerts = \App\Models\Company::whereHas('documents', $needsAttention)->count();
+
+    $companiesWithAlerts = \App\Models\Company::where(function ($q) use ($needsAttention) {
+        $q->whereHas('documents', $needsAttention)
+          ->orWhereHas('drivers.documents', $needsAttention)
+          ->orWhereHas('vehicles.documents', $needsAttention);
+    })->count();
+
+    return Inertia::render('Portal/Overview', [
+        'stats' => [
+            'companies' => \App\Models\Company::count(),
+            'alerts' => $companiesWithAlerts,
+            'drivers' => $driverAlerts,
+            'vehicles' => $vehicleAlerts,
+            'other' => $otherAlerts,
+        ],
+    ]);
+})->name('overview');
 
     // Placeholders so the sidebar links do not 404 before Phase 2
     Route::get('/users', fn () => Inertia::render('Portal/Users'))->name('users');
