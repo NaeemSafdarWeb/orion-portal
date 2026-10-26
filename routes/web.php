@@ -37,9 +37,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('overview');
 
     // Placeholders so the sidebar links do not 404 before Phase 2
-    Route::get('/users', fn () => Inertia::render('Portal/Overview'))->name('users');
-    Route::get('/roles', fn () => Inertia::render('Portal/Overview'))->name('roles');
-    Route::get('/notifications', fn () => Inertia::render('Portal/Overview'))->name('notifications');
+    Route::get('/users', fn () => Inertia::render('Portal/Users'))->name('users');
+    Route::get('/roles', fn () => Inertia::render('Portal/Roles'))->name('roles');
+    Route::get('/notifications', fn () => Inertia::render('Portal/Notifications'))->name('notifications');
 });
 
 require __DIR__.'/auth.php';
